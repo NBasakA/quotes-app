@@ -1,19 +1,49 @@
 "use client";
 
-import { Subtitle } from "../component/typography/Subtitle";
-import { QuoteText } from "../component/typography/QuoteText";
-import { quotes as InitialQuotes } from "../quotes";
 import { useState, useEffect } from "react";
-import {Button} from "../component/Button";
+import { Button } from "../component/Button";
+import { QuoteText } from "../component/typography/QuoteText";
+import { Subtitle } from "../component/typography/Subtitle";
+import { quotes as initialQuotes } from "../quotes";
+import { Card } from "../component/Card";
 
 export default function Home() {
-  const quotes = [...InitialQuotes];
-  let [index, setIndex] = useState(0);
+  const [quotes, setQuotes] = useState(initialQuotes);
+  const [index, setIndex] = useState(0);
+  const userId = "user-1";
+
+  const currentQuote = quotes[index] ?? null;
 
   function handleClick() {
     console.log("Current index is", index);
     console.log("Incrementing index....");
     setIndex((prevIndex) => prevIndex + 1);
+  }
+
+  function handlePrevious() {
+    console.log("Current index is", index);
+    console.log("Decrementing index....");
+    setIndex((prevIndex)=> prevIndex === 0 ? quotes.length -1 : prevIndex -1);
+  }
+
+  function handleLike() {
+    if (!currentQuote) return;
+
+    setQuotes((prevQuotes) =>
+      prevQuotes.map((quote, quoteIndex) => {
+        if (quoteIndex !== index) return quote;
+
+        const likedBy = quote.likedBy || [];
+        const isLiked = likedBy.includes(userId);
+
+        return {
+          ...quote,
+          likedBy: isLiked
+            ? likedBy.filter((id) => id !== userId)
+            : [...likedBy, userId],
+        };
+      }),
+    );
   }
 
   useEffect(() => {
@@ -22,15 +52,22 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center">
-      <div className="text-center p-20 rounded-md bg-zinc-100">
-        <div className='pb-6'>
-          <QuoteText className="text-zinc-100">{quotes[index].quote}</QuoteText>
-          <Subtitle>{quotes[index].author}</Subtitle>
+      <Card className="text-center p-20 rounded-md bg-zinc-100">
+        <div className="flex items-center align-items justify-end mb-6 gap-3">
+          <Button title="❤️" handleClick={handleLike} />
+          <span>{currentQuote?.likedBy?.length || 0}</span>
         </div>
-        <Button title="Next Quote" handleClick={handleClick} />
-      </div>
+
+        <div className="pb-6">
+          <QuoteText className="text-zinc-800">{currentQuote?.quote}</QuoteText>
+          <Subtitle>{currentQuote?.author}</Subtitle>
+        </div>
+        <div className="flex gap-4 justify-center">
+          <Button title="Previous Quote" handleClick={handlePrevious} />
+          <Button title="Next Quote" handleClick={handleClick} />
+          
+        </div>
+      </Card>
     </main>
   );
 }
-
-//TODO : Till now applied what they do during lesson. Now go on with the HW.
