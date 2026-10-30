@@ -16,6 +16,6 @@ export function Subtitle ({element, children}) {
             return(<h3 className="text-sm text-right">{children}</h3>)
         
         default:
-            return(<span className="text-sm block text-right">{children}</span>)
+            return(<span className="text-sm font-bold italic block text-right">{children}</span>)
     }
 }
