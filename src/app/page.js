@@ -54,12 +54,12 @@ export default function Home() {
 
         <div className="pb-6">
           <QuoteText className="text-zinc-800">
-            {currentQuote?.quote || "No quote available"}
+            {currentQuote?.quote}
           </QuoteText>
-          <Subtitle>{currentQuote?.author || "Unknown author"}</Subtitle>
+          <Subtitle>{currentQuote?.author}</Subtitle>
         </div>
 
-        <Button className="flex items-center " title="Next Quote" handleClick={handleClick} />
+        <Button title="Next Quote" handleClick={handleClick} />
       </Card>
     </main>
   );
