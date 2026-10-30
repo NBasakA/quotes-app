@@ -20,6 +20,12 @@ export default function Home() {
     setIndex((prevIndex) => prevIndex + 1);
   }
 
+  function handlePrevious() {
+    console.log("Current index is", index);
+    console.log("Decrementing index....");
+    setIndex((prevIndex)=> prevIndex === 0 ? quotes.length -1 : prevIndex -1);
+  }
+
   function handleLike() {
     if (!currentQuote) return;
 
@@ -53,13 +59,14 @@ export default function Home() {
         </div>
 
         <div className="pb-6">
-          <QuoteText className="text-zinc-800">
-            {currentQuote?.quote}
-          </QuoteText>
+          <QuoteText className="text-zinc-800">{currentQuote?.quote}</QuoteText>
           <Subtitle>{currentQuote?.author}</Subtitle>
         </div>
-
-        <Button title="Next Quote" handleClick={handleClick} />
+        <div className="flex gap-4 justify-center">
+          <Button title="Previous Quote" handleClick={handlePrevious} />
+          <Button title="Next Quote" handleClick={handleClick} />
+          
+        </div>
       </Card>
     </main>
   );
